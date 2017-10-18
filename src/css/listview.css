@@ -1,0 +1,6 @@
+#listView {
+  flex-grow: 1;
+  background-color: #bbed73;
+  height: 100%;
+  padding: 10px;
+}
