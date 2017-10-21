@@ -4,7 +4,7 @@
 Checkout the app
 ![Locator in Action][gif]
 
-[gif]: https://github.com/jykim16/maps/raw/master/ZenefitsChallenge.gif "App in Action"
+[gif]: https://github.com/jykim16/projectGifs/raw/master/MapsChallenge.gif "App in Action"
 
 ## Requirements
 
