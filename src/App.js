@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './css/App.css';
 import MapView from './MapView';
-import InfoView from './InfoView';
 import ListView from './ListView';
 import Header from './Header';
 
@@ -9,56 +8,57 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      companyChosen: false,
+      mapBounds: {},
+      placeMarkers: [],
+      center: {
+        lat: 37.783052,
+        lng: -122.391030
+      }
     }
+    this.setMapBounds = this.setMapBounds.bind(this);
+    this.setPlaceMarkers = this.setPlaceMarkers.bind(this);
+    this.centerMap = this.centerMap.bind(this);
+  }
+
+  setMapBounds(bounds) {
+    this.setState({
+      mapBounds: bounds
+    })
+  }
+
+  centerMap(center) {
+    this.setState({
+      center: center
+    })
+  }
+
+  setPlaceMarkers(markers) {
+    this.setState({
+      placeMarkers: markers
+    })
   }
 
   render() {
     return (
       <div className="App">
-        <Header/>
+        <Header
+          mapBounds={this.state.mapBounds}
+          setPlaceMarkers={this.setPlaceMarkers}
+        />
         <div className="main">
           <MapView
             coords={{
               // lat: 37.78,
               // lng: -122.39
             }}
-            markers={[{lat: 37.78, lng: -122.39}]}
+            markers={this.state.placeMarkers}
+            setMapBounds={this.setMapBounds}
+            center={this.state.center}
           />
-          {this.state.companyChosen ?
-            <InfoView
-              company={{
-                "id": 354,
-                "name": "IBM",
-                "website": "www.ibm.com",
-                "isEEP": false,
-                "exactMatch": false,
-                "industry": "",
-                "numberOfRatings": 0,
-                "squareLogo": "http://media.glassdoor.com/sqll/354/ibm-squarelogo.png",
-                "overallRating": 0,
-                "ratingDescription": "Not Applicable",
-                "cultureAndValuesRating": "3.6",
-                "seniorLeadershipRating": "2.9",
-                "compensationAndBenefitsRating": "2.6",
-                "careerOpportunitiesRating": "2.9",
-                "workLifeBalanceRating": "3.5",
-                "featuredReview": {
-                    "id": 3855871,
-                    "currentJob": false,
-                    "reviewDateTime": "2014-03-12 04:56:58.41",
-                    "jobTitle": "Employee",
-                    "location": "",
-                    "headline": "an extremly good compagny with very high benefits and perfectly committed to its employees with a great compagny culture",
-                    "pros": "an extremly good compagny with very high benefits and perfectly committed to its employees with a great compagny culture",
-                    "cons": "opportunities to travel to conference have been reduced"
-                }
-              }}
-            /> :
-           <ListView
-             search={[]}
-           />
-          }
+         <ListView
+           list={this.state.placeMarkers}
+           centerMap={this.centerMap}
+         />
         </div>
       </div>
     );

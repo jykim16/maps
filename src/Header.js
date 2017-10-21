@@ -10,7 +10,33 @@ class Header extends Component {
     }
     this.toggleHoverSearch = this.toggleHoverSearch.bind(this);
     this.handleClickSearch = this.handleClickSearch.bind(this);
+  }
+  componentDidMount() {
+    this.searchBox = new window.google.maps.places.SearchBox(document.getElementById('input'));
+    var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var labelIndex = 0;
+    (function(google, searchBox, setPlaceMarkers){
+      searchBox.addListener('places_changed', function() {
+        var places = searchBox.gm_accessors_.places.Lc.searchBoxPlaces;
+        var markers = [];
+        // For each place, get the icon, name and location.
+        markers = places.map(function(place) {
+          var icon = {
+            url: place.icon,
+            size: new google.maps.Size(71, 71),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(17, 34),
+            scaledSize: new google.maps.Size(25, 25)
+          };
+          return Object.assign(place, {icon: icon, label:labels[labelIndex++ % labels.length]})
+        });
+        setPlaceMarkers(markers);
+      })
+    })(window.google, this.searchBox, this.props.setPlaceMarkers)
+  }
 
+  componentDidUpdate() {
+    this.searchBox.setBounds(this.props.mapBounds)
   }
 
   toggleHoverSearch() {
@@ -23,21 +49,23 @@ class Header extends Component {
     this.setState({
       clickSearch: !this.state.clickSearch
     })
-    new window.google.maps.places.SearchBox(document.getElementById('input'));
   }
 
   render() {
     var icon;
     var title;
+    var display;
     if(!this.state.hoverSearch){
       icon = <img src="./assets/zenefitsLogo.png" height="80px" width="80px" alt="Zenefits"></img>
       title = <h1 className="App-title">Zenefits: Locator</h1>
-    } else if (this.state.clickSearch){
-      icon = <img src="./assets/searchIcon.png" height="80px" width="80px" alt="Search" onClick={this.handleClickSearch}></img>
-      title = <input id="input" type="text" />
     } else {
       icon = <img src="./assets/searchIcon.png" height="80px" width="80px" alt="Search"></img>
-      title = <h1 className="App-title">Click to begin your search</h1>
+      title = <h1 className="App-title" onClick={this.handleClickSearch}>Click to begin your search</h1>
+    }
+    if (!this.state.clickSearch){
+      display = {display: "none"}
+    } else {
+      display = {display: "inherit"}
     }
 
     return (
@@ -45,7 +73,10 @@ class Header extends Component {
         <div className="logo">
           {icon}
         </div>
-        {title}
+        <div className="info">
+          {title}
+          <input id="input" type="text" style={display}/>
+        </div>
       </header>
     );
   }
