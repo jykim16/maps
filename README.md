@@ -14,6 +14,7 @@ Checkout the app
 
 ```
 yarn install
+yarn global add server
 ```
 
 ## Initialization
@@ -24,6 +25,6 @@ yarn build
 
 ## Running the App
 
-run `yarn start`
+run `yarn global add server`
 
-go to localhost:3000
+go to localhost:5000
