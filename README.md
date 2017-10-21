@@ -25,6 +25,6 @@ yarn build
 
 ## Running the App
 
-run `yarn global add server`
+run `serve -s build`
 
 go to localhost:5000
