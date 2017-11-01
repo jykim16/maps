@@ -17,7 +17,7 @@ class Header extends Component {
     var labelIndex = 0;
     (function(google, searchBox, setPlaceMarkers){
       searchBox.addListener('places_changed', function() {
-        var places = searchBox.gm_accessors_.places.Lc.searchBoxPlaces;
+        var places = searchBox.getPlaces();
         var markers = [];
         // For each place, get the icon, name and location.
         markers = places.map(function(place) {
